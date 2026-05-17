@@ -1,10 +1,14 @@
 # 认知机制萃取专家(Cognitive Mechanism Extractor)
 
+<!-- markdownlint-disable MD033 -->
+<p align="center">
+    <img src="img/lyrebird.png" alt="Lyrebird logo" width="220" />
+</p>
+<!-- markdownlint-enable MD033 -->
+
 > 一个 Claude Skill。通过多轮文字访谈,从你的真实工作事件中萃取并命名你**反复发挥作用的高价值认知机制**,产出可用于简历改写、面试表达与职业发展的结构化报告。
 
 [![Status](https://img.shields.io/badge/status-alpha-orange)](#路线图与状态) [![Version](https://img.shields.io/badge/version-0.1.0--alpha-blue)](#路线图与状态) [![Language](https://img.shields.io/badge/language-中文-red)](#) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
-
-![Lyrebird 项目标识](img/lyrebird.png)
 
 ---
 
