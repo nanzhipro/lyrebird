@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lyrebird.local/schemas/report-outline.schema.json",
+  "title": "ReportOutline",
+  "description": "最终萃取报告的结构化大纲,与 assets/report-template.md 一一对应。可用于程序化校验、批量导出。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "frontmatter",
+    "executive_summary",
+    "input_constraints",
+    "candidate_profile",
+    "mechanism_overview",
+    "validated_mechanisms",
+    "strong_hypotheses",
+    "weak_signals",
+    "evidence_appendix",
+    "resume_rewrites",
+    "interview_answers",
+    "next_steps",
+    "methodology_note"
+  ],
+  "properties": {
+    "frontmatter": {
+      "type": "object",
+      "required": ["title", "report_language", "version"],
+      "properties": {
+        "title": { "type": "string", "const": "认知机制萃取报告" },
+        "candidate_name": { "type": "string" },
+        "report_language": { "type": "string", "default": "zh-CN" },
+        "version": { "type": "string" },
+        "confidence_overall": { "type": "number", "minimum": 0, "maximum": 1 },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "skill_version": { "type": "string" }
+      }
+    },
+    "executive_summary": {
+      "type": "object",
+      "required": ["purpose", "scope", "overall_confidence", "key_takeaways"],
+      "properties": {
+        "purpose": { "type": "string" },
+        "scope": { "type": "string" },
+        "overall_confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "key_takeaways": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "input_constraints": {
+      "type": "object",
+      "properties": {
+        "resume_source": { "type": "string" },
+        "interview_rounds": { "type": "integer" },
+        "supplementary_materials": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "hard_limits": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "candidate_profile": {
+      "type": "object",
+      "properties": {
+        "role_trajectory": { "type": "string" },
+        "work_context": { "type": "string" },
+        "typical_tasks": { "type": "array", "items": { "type": "string" } },
+        "main_constraints": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "mechanism_overview": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "mechanism_id",
+          "name",
+          "type",
+          "confidence",
+          "status",
+          "evidence_count"
+        ],
+        "properties": {
+          "mechanism_id": { "type": "string", "pattern": "^M-[0-9]{3,}$" },
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "confidence": { "type": "number" },
+          "status": {
+            "type": "string",
+            "enum": ["validated", "strong-hypothesis", "weak-signal"]
+          },
+          "evidence_count": { "type": "integer" }
+        }
+      }
+    },
+    "validated_mechanisms": {
+      "type": "array",
+      "items": {
+        "$ref": "https://lyrebird.local/schemas/mechanism-card.schema.json"
+      }
+    },
+    "strong_hypotheses": {
+      "type": "array",
+      "items": {
+        "$ref": "https://lyrebird.local/schemas/mechanism-card.schema.json"
+      }
+    },
+    "weak_signals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "signal_description": { "type": "string" },
+          "reason_not_upgraded": { "type": "string" },
+          "followup_question": { "type": "string" }
+        }
+      }
+    },
+    "evidence_appendix": {
+      "type": "array",
+      "items": {
+        "$ref": "https://lyrebird.local/schemas/evidence-card.schema.json"
+      }
+    },
+    "resume_rewrites": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["version", "original", "rewritten", "linked_mechanisms"],
+        "properties": {
+          "version": {
+            "type": "string",
+            "enum": ["general", "management", "ambiguous-problem-solving"]
+          },
+          "original": { "type": "string" },
+          "rewritten": { "type": "string" },
+          "linked_mechanisms": {
+            "type": "array",
+            "items": { "type": "string", "pattern": "^M-[0-9]{3,}$" }
+          },
+          "candidate_approved": { "type": "boolean" }
+        }
+      }
+    },
+    "interview_answers": {
+      "type": "object",
+      "properties": {
+        "self_introduction_60s": { "type": "string" },
+        "star_narrative_2to3min": { "type": "string" },
+        "high_pressure_short": { "type": "string" },
+        "things_to_avoid": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "next_steps": {
+      "type": "object",
+      "properties": {
+        "mechanisms_to_strengthen": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "mechanisms_to_watch_boundary": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "experiences_to_supplement": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "next_interview_topic": { "type": "string" }
+      }
+    },
+    "methodology_note": { "type": "string" }
+  }
+}

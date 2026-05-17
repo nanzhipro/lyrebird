@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lyrebird.local/schemas/mechanism-card.schema.json",
+  "title": "MechanismCard",
+  "description": "机制卡 — 候选人反复发挥作用的高价值认知机制的结构化表达。每条必须回指 evidence cards。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "mechanism_id",
+    "working_name",
+    "one_sentence_definition",
+    "mechanism_type",
+    "core_pattern",
+    "trigger_contexts",
+    "input_cues",
+    "internal_operation",
+    "action_signature",
+    "value_created",
+    "boundary_conditions",
+    "failure_modes",
+    "development_stage",
+    "evidence_ids",
+    "resume_implication",
+    "interview_implication",
+    "candidate_validation_note",
+    "confidence_final",
+    "confidence_breakdown"
+  ],
+  "properties": {
+    "mechanism_id": {
+      "type": "string",
+      "pattern": "^M-[0-9]{3,}$",
+      "description": "格式 M-001。"
+    },
+    "working_name": {
+      "type": "string",
+      "minLength": 6,
+      "maxLength": 40,
+      "description": "当前机制名称。必须符合 assets/naming-style-guide.md 规则。"
+    },
+    "one_sentence_definition": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 200,
+      "description": "一句话定义,候选人可立即识别。"
+    },
+    "mechanism_type": {
+      "type": "string",
+      "enum": [
+        "cue-reading",
+        "problem-framing",
+        "tradeoff",
+        "coordination",
+        "iteration",
+        "reflection",
+        "mixed"
+      ]
+    },
+    "core_pattern": {
+      "type": "string",
+      "description": "机制的稳定模式描述: 在 X 情境下,先 A 后 B,再 C。"
+    },
+    "trigger_contexts": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "常见触发情境。"
+    },
+    "input_cues": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "机制依赖的关键信号(从证据卡 critical_cues 聚合)。"
+    },
+    "internal_operation": {
+      "type": "string",
+      "description": "中间认知动作: 拆解、比较、预判、抽象等。"
+    },
+    "action_signature": {
+      "type": "string",
+      "description": "外显行为长什么样,他人可观察。"
+    },
+    "value_created": {
+      "type": "string",
+      "description": "产生的价值方向(降低/提升/规避什么)。"
+    },
+    "boundary_conditions": {
+      "type": "string",
+      "description": "在什么场景下有效。"
+    },
+    "failure_modes": {
+      "type": "string",
+      "description": "何时会失效或过度使用 — 必填,不能空。"
+    },
+    "development_stage": {
+      "type": "string",
+      "enum": ["validated", "strong-hypothesis", "weak-signal"],
+      "description": "发展阶段。validated 需要至少 3 evidence + 1 反证 + 候选人认可。"
+    },
+    "evidence_ids": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^E-[0-9]{3,}$" },
+      "minItems": 1,
+      "description": "正向证据卡 id 列表。"
+    },
+    "counterevidence_ids": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^E-CE-[0-9]{3,}$" },
+      "description": "反证或边界证据卡 id 列表。"
+    },
+    "transfer_scenarios": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "通过迁移测试的场景列表。"
+    },
+    "resume_implication": {
+      "type": "string",
+      "description": "对简历写法的启发(具体到一句改写示例)。"
+    },
+    "interview_implication": {
+      "type": "string",
+      "description": "对面试表达的启发。"
+    },
+    "candidate_validation_note": {
+      "type": "string",
+      "description": "候选人是否认可、是否改名、如何复述。"
+    },
+    "confidence_final": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "最终置信度,按公式合成。"
+    },
+    "confidence_breakdown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_richness",
+        "cross_context_repetition",
+        "outcome_linkage",
+        "candidate_recognition",
+        "counterevidence_pass"
+      ],
+      "properties": {
+        "event_richness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "事件丰富度 (权重 0.30)"
+        },
+        "cross_context_repetition": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "跨情境复现 (权重 0.25)"
+        },
+        "outcome_linkage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "结果关联度 (权重 0.20)"
+        },
+        "candidate_recognition": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "候选人识别感 (权重 0.15)"
+        },
+        "counterevidence_pass": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "反证通过度 (权重 0.10)"
+        }
+      }
+    }
+  }
+}

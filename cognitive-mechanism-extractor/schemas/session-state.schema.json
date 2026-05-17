@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lyrebird.local/schemas/session-state.schema.json",
+  "title": "SessionState",
+  "description": "会话级状态对象,记录当前流程进度、契约确认、已采集证据数等。仅会话内有效,不持久化。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "session_id",
+    "current_stage",
+    "contract_confirmed",
+    "evidence_cards",
+    "mechanism_cards",
+    "hypothesis_map"
+  ],
+  "properties": {
+    "session_id": {
+      "type": "string",
+      "description": "会话唯一 id (UUID 或时间戳)。"
+    },
+    "candidate_alias": {
+      "type": "string",
+      "description": "候选人化名/匿名占位符(可选,候选人可设置)。"
+    },
+    "current_stage": {
+      "type": "string",
+      "enum": [
+        "intake",
+        "hypothesis",
+        "deep-dive",
+        "synthesis",
+        "naming",
+        "report"
+      ]
+    },
+    "contract_confirmed": {
+      "type": "boolean",
+      "description": "候选人是否明确确认了 candidate-contract.md 的边界。"
+    },
+    "interview_rounds": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "已经完成的访谈轮数。"
+    },
+    "hypothesis_map": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hypotheses", "incidents_to_probe"],
+      "properties": {
+        "resume_extracts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["raw_snippet", "type"],
+            "properties": {
+              "raw_snippet": { "type": "string" },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "responsibility",
+                  "result",
+                  "turning-point",
+                  "gap",
+                  "self-claim"
+                ]
+              }
+            }
+          }
+        },
+        "hypotheses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["hypothesis_id", "statement", "status"],
+            "properties": {
+              "hypothesis_id": { "type": "string", "pattern": "^H-[0-9]{3,}$" },
+              "statement": { "type": "string" },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "untested",
+                  "supported",
+                  "refuted",
+                  "refined",
+                  "abandoned"
+                ]
+              },
+              "evidence_ids": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        },
+        "incidents_to_probe": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["title", "priority"],
+            "properties": {
+              "title": { "type": "string" },
+              "priority": {
+                "type": "string",
+                "enum": ["high", "medium", "low"]
+              },
+              "rationale": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "evidence_cards": {
+      "type": "array",
+      "items": {
+        "$ref": "https://lyrebird.local/schemas/evidence-card.schema.json"
+      }
+    },
+    "mechanism_cards": {
+      "type": "array",
+      "items": {
+        "$ref": "https://lyrebird.local/schemas/mechanism-card.schema.json"
+      }
+    },
+    "engagement_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "avg_response_length_chars": { "type": "integer" },
+        "specific_event_count": { "type": "integer" },
+        "abstract_self_summary_ratio": { "type": "number" },
+        "needs_recovery": { "type": "boolean" }
+      },
+      "description": "用于触发 low-engagement-recovery 分支的指标。"
+    },
+    "redaction_list": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "候选人要求匿名化的实体列表(公司名、客户名、人名等)。"
+    },
+    "notes": {
+      "type": "string",
+      "description": "AI 内部备注,不出现在报告中。"
+    }
+  }
+}
