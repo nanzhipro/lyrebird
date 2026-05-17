@@ -4,6 +4,8 @@
 
 [![Status](https://img.shields.io/badge/status-alpha-orange)](#路线图与状态) [![Version](https://img.shields.io/badge/version-0.1.0--alpha-blue)](#路线图与状态) [![Language](https://img.shields.io/badge/language-中文-red)](#) [![License](https://img.shields.io/badge/license-MIT-green)](#license)
 
+![Lyrebird 项目标识](img/lyrebird.png)
+
 ---
 
 ## 它解决什么问题
